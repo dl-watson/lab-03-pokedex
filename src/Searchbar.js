@@ -16,7 +16,7 @@ export default class Searchbar extends Component {
         <Sort
           data={this.props.data}
           handleCategorySelect={this.props.handleCategorySelect}
-          handleSort={this.props.handleSort}
+          handleSortDirection={this.props.handleSortDirection}
         />
       </section>
     );

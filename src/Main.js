@@ -34,7 +34,7 @@ export default class Main extends Component {
             data={this.props.data}
             handleFormSubmit={this.props.handleFormSubmit}
             handleCategorySelect={this.props.handleCategorySelect}
-            handleSort={this.props.handleSort}
+            handleSortDirection={this.props.handleSortDirection}
             handleSearch={this.props.handleSearch}
             inputVal={this.props.inputVal}
             pokemonName={this.props.pokemonName}
@@ -44,7 +44,7 @@ export default class Main extends Component {
             data={this.props.data}
             loading={this.props.loading}
             selectedCategory={this.props.selectedCategory}
-            selectedSort={this.props.selectedSort}
+            selectedSortDirection={this.props.selectedSortDirection}
             inputVal={this.props.inputVal}
             handlePokemonClick={this.props.handlePokemonClick}
           />
