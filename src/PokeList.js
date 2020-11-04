@@ -4,8 +4,8 @@ import PokeItem from "./PokeItem.js";
 
 export default class PokeList extends Component {
   render() {
-    const filtered = filterData(this.props.data, this.props.selectedCategory);
-    const sorted = sortData(filtered, this.props.selectedSort);
+    const filtered = filterData(this.props.data, this.props.sortType);
+    const sorted = sortData(filtered, this.props.sortDirection);
     const validated = searchValidation(sorted, this.props.inputVal);
 
     return (
@@ -48,14 +48,14 @@ const filterData = (data, filterCategory) => {
   );
 };
 
-const sortData = (data, selectedSort) => {
-  if (selectedSort === "") {
+const sortData = (data, sortDirection) => {
+  if (sortDirection === "") {
     return data;
   }
-  if (selectedSort === "descending") {
+  if (sortDirection === "descending") {
     return data.sort((a, b) => a.pokemon.localeCompare(b.pokemon));
   }
-  if (selectedSort === "ascending") {
+  if (sortDirection === "ascending") {
     return data.sort((a, b) => b.pokemon.localeCompare(a.pokemon));
   }
 };

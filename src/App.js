@@ -9,8 +9,8 @@ import Navbar from "./Navbar.js";
 
 export default class App extends Component {
   state = {
-    selectedCategory: "",
-    selectedSort: "",
+    sortType: "",
+    sortDirection: "",
     inputVal: "",
     pokedex: [],
     loading: true,
@@ -23,23 +23,15 @@ export default class App extends Component {
     await this.setState({
       activePage: pageNumber,
     });
-    this.fetchPokemonAPI();
+    if (this.state.sort) {
+      await this.handleSort();
+    } else {
+      await this.handleSortDirection();
+    }
   }
 
   handlePokemonClick = async (pokemon) => {
     this.props.history.push(`/pokemon/${pokemon.pokemon}`);
-  };
-
-  handleCategorySelect = (e) => {
-    this.setState({
-      selectedCategory: e.target.value,
-    });
-  };
-
-  handleSort = (e) => {
-    this.setState({
-      selectedSort: e.target.value,
-    });
   };
 
   handleSearch = async (e) => {
@@ -51,12 +43,74 @@ export default class App extends Component {
 
   handleFormSubmit = async (e) => {
     e.preventDefault();
+    await request.get(
+      `https://alchemy-pokedex.herokuapp.com/api/pokedex?pokemon=${this.state.inputVal}&page=${this.state.activePage}&perPage=${this.state.perPage}`
+    );
 
     await this.fetchPokemonAPI();
   };
 
   componentDidMount = async () => {
     await this.fetchPokemonAPI();
+  };
+
+  handleSortDirection = async (e) => {
+    await this.setState({
+      sortDirection: e.target.value,
+    });
+
+    this.handleSortSelect();
+  };
+
+  handleSelectedSort = async (e) => {
+    await this.setState({
+      sortType: e.target.value,
+    });
+
+    this.handleSortDirection();
+  };
+
+  handleSortSelect = async () => {
+    if (
+      this.state.sortDirection === "asc" ||
+      this.state.sortDirection === "desc"
+    ) {
+      const sorted = await request.get(
+        `https://alchemy-pokedex.herokuapp.com/api/pokedex?pokemon=${this.state.inputVal}&sort=${this.state.sortType}&direction=${this.state.sortDirection}&page=${this.state.activePage}&perPage=20`
+      );
+
+      this.setState({
+        pokedex: sorted.body.results,
+      });
+    } else {
+      const list = await request.get(
+        `https://alchemy-pokedex.herokuapp.com/api/pokedex?page=${this.state.activePage}&perPage=20`
+      );
+
+      this.setState({
+        pokedex: list.body.results,
+      });
+    }
+  };
+
+  handleSortDirection = async () => {
+    if (this.state.sortType === "") {
+      const list = await request.get(
+        `https://alchemy-pokedex.herokuapp.com/api/pokedex?pokemon=${this.state.inputVal}&page=${this.state.activePage}&perPage=${this.state.perPage}`
+      );
+
+      this.setState({
+        pokemon: list.body.results,
+      });
+    } else {
+      const sorted = await request.get(
+        `https://alchemy-pokedex.herokuapp.com/api/pokedex?pokemon=${this.state.inputVal}&type=${this.state.sortType}&page=${this.state.activePage}&perPage=${this.state.perPage}`
+      );
+
+      this.setState({
+        pokemon: sorted.body.results,
+      });
+    }
   };
 
   fetchPokemonAPI = async () => {
@@ -97,13 +151,13 @@ export default class App extends Component {
                   data={this.state.pokedex}
                   loading={this.state.loading}
                   handleFormSubmit={this.handleFormSubmit}
-                  handleCategorySelect={this.handleCategorySelect}
-                  handleSort={this.handleSort}
+                  handleSortDirection={this.handleSortDirection}
+                  handleSortSelect={this.handleSortSelect}
+                  sortDirection={this.state.sortDirection}
+                  sortType={this.state.sortType}
                   handleSearch={this.handleSearch}
                   inputVal={this.state.inputVal}
-                  selectedCategory={this.state.selectedCategory}
-                  selectedSort={this.state.selectedSort}
-                  fetchPokemonAPI={this.fetchPokemonAPI}
+                  // fetchPokemonAPI={this.fetchPokemonAPI}
                   activePage={this.state.activePage}
                   perPage={this.state.perPage}
                   handlePokemonClick={this.handlePokemonClick}
@@ -118,7 +172,7 @@ export default class App extends Component {
                 <Details
                   {...routerProps}
                   data={this.state.pokedex}
-                  fetchPokemonAPI={this.fetchPokemonAPI}
+                  // fetchPokemonAPI={this.fetchPokemonAPI}
                   pokemon={this.state.pokemon}
                 />
               )}

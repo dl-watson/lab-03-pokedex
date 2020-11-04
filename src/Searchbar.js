@@ -15,8 +15,10 @@ export default class Searchbar extends Component {
         </form>
         <Sort
           data={this.props.data}
-          handleCategorySelect={this.props.handleCategorySelect}
-          handleSort={this.props.handleSort}
+          handleSortDirection={this.props.handleSortDirection}
+          handleSortSelect={this.props.handleSortSelect}
+          sortDirection={this.props.sortDirection}
+          sortType={this.props.sortType}
         />
       </section>
     );
