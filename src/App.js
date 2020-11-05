@@ -16,7 +16,7 @@ export default class App extends Component {
     loading: true,
     activePage: 1,
     perPage: 30,
-    count: "",
+    count: 0,
     pokemon: [],
   };
 
