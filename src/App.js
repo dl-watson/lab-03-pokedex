@@ -15,7 +15,8 @@ export default class App extends Component {
     pokedex: [],
     loading: true,
     activePage: 1,
-    perPage: 50,
+    perPage: 30,
+    count: "",
     pokemon: [],
   };
 
@@ -70,7 +71,18 @@ export default class App extends Component {
       );
       return this.setState({
         pokedex: res.body.results,
+        count: res.body.count,
         loading: false,
+      });
+    } else if (this.state.inputVal.length > 0) {
+      const res = await request.get(
+        `https://alchemy-pokedex.herokuapp.com/api/pokedex?pokemon=${this.state.inputVal}&page=${this.state.activePage}&perPage=${this.state.perPage}`
+      );
+      return this.setState({
+        pokedex: res.body.results,
+        count: res.body.count,
+        loading: false,
+        perPage: this.state.count / 5,
       });
     } else {
       const res = await request.get(
@@ -78,6 +90,7 @@ export default class App extends Component {
       );
       return this.setState({
         pokedex: res.body.results,
+        count: res.body.count,
         loading: false,
       });
     }
@@ -90,6 +103,7 @@ export default class App extends Component {
       );
       return this.setState({
         pokedex: res.body.results,
+        count: res.body.count,
       });
     } else {
       const res = await request.get(
@@ -97,6 +111,7 @@ export default class App extends Component {
       );
       return this.setState({
         pokedex: res.body.results,
+        count: res.body.count,
       });
     }
   };
@@ -123,6 +138,7 @@ export default class App extends Component {
                   handleSortDirection={this.handleSortDirection}
                   handleSearch={this.handleSearch}
                   inputVal={this.state.inputVal}
+                  count={this.state.count}
                   selectedCategory={this.state.selectedCategory}
                   selectedSortDirection={this.state.selectedSortDirection}
                   fetchPokemonAPI={this.fetchPokemonAPI}
