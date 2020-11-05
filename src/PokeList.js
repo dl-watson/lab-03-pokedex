@@ -4,10 +4,6 @@ import PokeItem from "./PokeItem.js";
 
 export default class PokeList extends Component {
   render() {
-    const filtered = filterData(this.props.data, this.props.selectedCategory);
-    const sorted = sortData(filtered, this.props.selectedSort);
-    const validated = searchValidation(sorted, this.props.inputVal);
-
     return (
       <section className="poke-list">
         {this.props.loading ? (
@@ -19,7 +15,7 @@ export default class PokeList extends Component {
             />
           </div>
         ) : (
-          validated.map((pokemon) => {
+          this.props.data.map((pokemon) => {
             return (
               <Link to={`/details/${pokemon.pokemon}`}>
                 <PokeItem
@@ -41,31 +37,3 @@ export default class PokeList extends Component {
     );
   }
 }
-
-const filterData = (data, filterCategory) => {
-  return data.filter(
-    (pokemon) => !filterCategory || pokemon.type_1 === filterCategory
-  );
-};
-
-const sortData = (data, selectedSort) => {
-  if (selectedSort === "") {
-    return data;
-  }
-  if (selectedSort === "descending") {
-    return data.sort((a, b) => a.pokemon.localeCompare(b.pokemon));
-  }
-  if (selectedSort === "ascending") {
-    return data.sort((a, b) => b.pokemon.localeCompare(a.pokemon));
-  }
-};
-
-const searchValidation = (data, input) => {
-  if (input) {
-    return data.filter((pokemon) =>
-      pokemon.pokemon.toLowerCase().includes(input)
-    );
-  } else {
-    return data;
-  }
-};
