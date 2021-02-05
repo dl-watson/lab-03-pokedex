@@ -10,7 +10,7 @@ export default class Details extends Component {
 
   componentDidMount = async () => {
     const res = await request.get(
-      `https://alchemy-pokedex.herokuapp.com/api/pokedex?pokemon=${this.props.match.params.pokename}`
+      `https://pokedex-alchemy.herokuapp.com/api/pokedex?pokemon=${this.props.match.params.pokename}`
     );
     this.setState({
       pokemon: res.body.results[0],
